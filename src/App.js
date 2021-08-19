@@ -1,14 +1,17 @@
 import './App.css';
-import { useEffect } from 'react';
+import { showNotification } from './helpers';
 
 const App = () => {
-    useEffect(() => {
-        if (navigator.serviceWorker) {
-            navigator.serviceWorker.register('./sw.js').then(registration => {
-                console.log('REGISTERED', registration);
+    if (window.Notification) {
+        console.log('==>Notification.permission', Notification.permission);
+        if (Notification.permission === 'granted') {
+            showNotification();
+        } else if (Notification.permission !== 'denied') {
+            Notification.requestPermission().then(e => {
+                console.log('==>Permission', e);
             });
         }
-    }, [])
+    }
 
     return (
         <div className="App">
